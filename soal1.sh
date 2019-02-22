@@ -1,7 +1,7 @@
 #!/bin/bash
 
 tempat=/home/duhbuntu/sisop/prak1
-unzip $tempat/nature.zip -d $tempat
+if [[ ! -d "$tempat/nature"  ]]; then unzip $tempat/nature.zip -d $tempat; fi
 
 k=0
 

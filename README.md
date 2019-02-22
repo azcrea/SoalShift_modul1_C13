@@ -95,6 +95,7 @@ Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta un
      + `sort -nrk2 -t,`, berarti akan menyortir seluruh data tersebut, `-nrk2` berarti akan disortir secara DESC berdasarkan kolom ke dua, `-t,` dengan field yang dipisahkan oleh koma
      + `head -n3`, berarti akan mengambil tiga data pertama
      
+     
      ```bash
      echo "${produk[0]} :"
      awk -v negara="$a" -v p1="${temp[0]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1 && $7 == 2012) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'

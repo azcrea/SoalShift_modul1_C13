@@ -36,7 +36,20 @@ Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta un
    * Tentukan tiga product line yang memberikan penjualan(quantity) terbanyak pada soal poin a.
    * Tentukan tiga product yang memberikan penjualan(quantity) terbanyak berdasarkan tiga product line yang didapatkan pada soal poin b.
 ### Jawab:
-Untuk mendapatkan 
+   * Untuk mendapatkan kota terbanyak quantity nya, sehingga kita perlu mencari setiap pendapatan pada tahun 2012 per negaranya
+     ```
+     a=$(awk 'BEGIN {FS = ",";terbanyak=0;} /2012/ {a[$1]+=$10} END{negara=0;for(b in a){if(a[b] > terbanyak)
+     {negara=b;terbanyak=a[b];}}print negara;}' WA_Sales_Products_2012-14.csv)
+     echo "Negara terbanyak :"
+     echo "$a"
+     echo " "
+     ```
+     + `FS = ","` berarti field separator/delimiter dari setiap record adalah '`,`' (koma)
+     + `terbanyak=0`, merupakan variabel untuk menyimpan `quantity` terbanyak
+     + `/2012/`, berarti mengambil seluruh data yang berada pada tahun 2012
+     + `a[$1]+=$10`, berarti menjumlahkan seluruh quantity, `$10`, berdasarkan negaranya, atau dalam hal ini dalam array a dengan indeks `a[$1]`
+     + `for(b in a){if(a[b] > terbanyak){negara=b;terbanyak=a[b];}}`, berarti akan mengecek setiap indeks array a, yakni array map, `a["United States"]` apakah ia merupakan negara dengan **quantity** terbanyak dengan `if(a[b] > terbanyak {negara=b;terbanyak=a[b];}` lalu mencetak negara tersebut dan menyimpannya di variabel a
+   * Untuk mendapatkan production line terbanyak
 
 ## Soal 3
 Buatlah sebuah script bash yang dapat menghasilkan password secara acak sebanyak 12 karakter yang terdapat huruf besar, huruf kecil, dan angka. Password acak tersebut disimpan pada file berekstensi .txt dengan ketentuan pemberian nama sebagai berikut:

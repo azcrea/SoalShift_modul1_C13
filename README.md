@@ -199,7 +199,7 @@ cat /var/log/syslog | tr "${low:0:26}" "${low:rot:26}" | tr "${hig:0:26}" "${hig
 + `"${low:rot:26}"` berarti seluruh karakter dari **$low** mulai dari indeks ke **$rot** hingga **$rot+26**, yang berarti kumpulan set karakter alfabet yang digeser sebesar **$rot**
 + `tr "${low:0:26}" "${low:rot:26}"` berarti setiap karakter dengan SET karakter pola **${low:0:26}** akan diganti ke SET karakter pola **${low:$rot:26}**. Semisal sekarang menunjukkan pukul 7, maka SET 1, yakni **[a-z]** akan dirubah ke SET 2 yakni **[h-za-g]**, jadi **abcdefghijklmnopqrstuvwxyz** **(low indeks 0 hingga 26+0)** akan dirubah ke **hijklmnopqrstuvwxyzabcdefg** **(low indeks ke 7 hingga 26+7)**
 + `> $loc/$file` berarti kita akan memasukkan backup tersebut ke file pada `/home/duhbuntu/sisop/prak1/[nama-file]`
-Karena script tersebut dijalankan setiap jam, maka crontab yang digunakan adalah
+Karena script tersebut dijalankan setiap jam, maka `crontab -e` yang digunakan adalah
 `@hourly /bin/bash /home/duhbuntu/sisop/prak1/soal4.sh` yang berarti dijalankan perjam
 
 
@@ -241,3 +241,4 @@ awk '/[Cc][Rr][Oo][Nn]/,!/[Ss][Uu][Dd][Oo]/' /var/log/syslog | awk 'NF < 13' >> 
 + `!/[Ss][Uu][Dd][Oo]/` berarti seluruh string yang memiliki pola `sudo` baik uppercase maupun lowercase akan diekslusi oleh awk 
 + `NF < 13` berarti akan mengambil hingga field ke 12
 + `>> $loc/modul1/nomor5.log` berarti hasildari awk tersebut akan write di file `/home/duhbuntu/modul1/nomor5.log`
++ Lalu pada `crontab -e` kita tambahkan `2-30/6 * * * * /bin/bash /home/duhbuntu/sisop/prak1/soal5.sh`

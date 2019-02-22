@@ -45,7 +45,45 @@ Buatlah sebuah script bash yang dapat menghasilkan password secara acak sebanyak
    * Urutan nama file tidak boleh ada yang terlewatkan meski filenya dihapus.
    * Password yang dihasilkan tidak boleh sama.
 ### Jawab:
-Untuk mendapat kan random, kita bisa mengambil sebuah random generator yang disediakan oleh linux pada `/dev/urandom`. Dari random tersebut tentu kita harus mengambil hanya huruf kecil, huruf besar, dan angkanya saja, oleh karena itu kita bisa menggunakan fungsi `tr -dc [a-zA-Z0-9]`
+Untuk mendapat kan random, kita bisa mengambil sebuah random generator yang disediakan oleh linux pada `/dev/urandom`. Dari random tersebut tentu kita harus mengambil hanya huruf kecil, huruf besar, dan angkanya saja, oleh karena itu kita bisa menggunakan fungsi `tr -dc 'a-zA-Z0-9'` yang berarti kita hanya mengambil lowercase a-z, uppercase A-Z, dan number dari random tersebut karena `tr -dc` berarti menghapus komplemen dari pola `'a-zA-Z0-9`, lalu kita bisa mengambil hanya 12 bagian pertamanya saja dengan `fold -w 12'` yang berarti mengambil hanya 12 bagian hurufnya.
+```
+#!/bin/bash
+
+loc=$(pwd)
+
+randompassword(){
+res=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1)
+until [[ "$res" =~ [a-z]  &&  "$res" =~ [A-Z]  && "$res" =~ [0-9] ]]
+do
+  res=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1)
+done
+
+}
+
+
+i=1
+
+randompassword
+
+while true;
+do
+ if [ -f "$loc/password$i.txt" ]
+  then
+   pass=$(awk '{print $1}' password$i.txt)
+   while [ "$pass" == "$res" ]
+   do
+    randompassword
+    #echo "ada"
+   done
+   i=$((i+1))
+ else
+  echo "$res" > password$i.txt
+  #echo "$res"
+  exit
+ fi
+done
+```
+Karena terkadang `fold` mengambil 12 bagian pertama dari random generator tersebut terkadang tidak termasuk huruf kecil dan atau huruf besar serta angka, maka kita ulang ketika tidak memenuhi aturan dengan fungsi `randompassword()`
 
 
 4. Lakukan backup file syslog setiap jam dengan format nama file “jam:menit tanggal-bulan-tahun”. Isi dari file backup terenkripsi dengan konversi huruf (string manipulation) yang disesuaikan dengan jam dilakukannya backup misalkan sebagai berikut:

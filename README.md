@@ -154,3 +154,16 @@ Buatlah sebuah script bash untuk menyimpan record dalam syslog yang memenuhi kri
    * Masukkan record tadi ke dalam file logs yang berada pada direktori /home/[user]/modul1.
    * Jalankan script tadi setiap 6 menit dari menit ke 2 hingga 30, contoh 13:02, 13:08, 13:14, dst.
 ### Jawab:
+Dari soal diatas, maka kita perlu memparsing seluruh text yang memiliki pola `'cron'` dan `'sudo'`, lalu kita perlu mengeksklusi seluruh string yang memiliki pola `'sudo'` agar tidak ada string yang memiliki pola `'sudo'` pada log tersebut. 
+```bash
+#!/bin/bash
+
+loc=/home/duhbuntu
+if [[ ! -d "$loc/modul1"  ]]; then mkdir $loc/modul1; fi
+awk '/[Cc][Rr][Oo][Nn]/,!/[Ss][Uu][Dd][Oo]/' /var/log/syslog | awk 'NF < 13' >> $loc/modul1/nomor5.log
+```
++ `if [[ ! -d "$loc/modul1"  ]]; then mkdir $loc/modul1; fi` berarti apabila belum ada direktori `/home/duhbuntu/modul1`, maka akan membuat file `home/duhbuntu/modul1`
++ `/[Cc][Rr][Oo][Nn]/` berarti seluruh string yang memiliki pola `cron` baik uppercase maupun lowercase akan diambil oleh awk
++ `!/[Ss][Uu][Dd][Oo]/` berarti seluruh string yang memiliki pola `sudo` baik uppercase maupun lowercase akan diekslusi oleh awk 
++ `NF < 13` berarti akan mengambil hingga field ke 12
++ `>> $loc/modul1/nomor5.log` berarti hasildari awk tersebut akan write di file `/home/duhbuntu/modul1/nomor5.log`

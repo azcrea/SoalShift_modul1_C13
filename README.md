@@ -75,7 +75,9 @@ do
     randompassword
     #echo "ada"
    done
-   i=$((i+1))
+   i=$((i+1))echo "$res" > password$i.txt
+  #echo "$res"
+  exit
  else
   echo "$res" > password$i.txt
   #echo "$res"
@@ -91,12 +93,36 @@ Karena terkadang `fold` mengambil 12 bagian pertama dari random generator terseb
 + `echo "$res" > password$i.txt exit` apabila sudah tidak sama dengan password lain dan pada password-n.txt yang belum tersedia, maka simpan dan exit dari script tersebut
 
 
-4. Lakukan backup file syslog setiap jam dengan format nama file “jam:menit tanggal-bulan-tahun”. Isi dari file backup terenkripsi dengan konversi huruf (string manipulation) yang disesuaikan dengan jam dilakukannya backup misalkan sebagai berikut:
+## Soal 4
+Lakukan backup file syslog setiap jam dengan format nama file “jam:menit tanggal-bulan-tahun”. Isi dari file backup terenkripsi dengan konversi huruf (string manipulation) yang disesuaikan dengan jam dilakukannya backup misalkan sebagai berikut:
    * Huruf b adalah alfabet kedua, sedangkan saat ini waktu menunjukkan pukul 12, sehingga huruf b diganti dengan huruf alfabet yang memiliki urutan ke 12+2 = 14.
    * Hasilnya huruf b menjadi huruf n karena huruf n adalah huruf ke empat belas, dan seterusnya.
    * setelah huruf z akan kembali ke huruf a
    * Backup file syslog setiap jam.
    * dan buatkan juga bash script untuk dekripsinya.
+### Jawab:
+### Enkripsi:
+Untuk meng-enkripsi back up dari **(/var/log/syslog)**, kita perlu waktu ketika script tersebut dijalankan. Untuk itu kita bisa menggunakan command `date "+%H"` dan menyimpannya pada sebuah variable untuk diolah pada scriptnya. Dari masalah ini, kita bisa menggunakan command `tr` untuk mentranslate sebuah set pattern dari suatu karakter menjadi karakter lain,
+command `tr [SET1] [SET2]` berarti string yang mengandung **(SET1)** akan di translate / dirubah ke **(SET2)**, berikut script yang bisa digunakan untuk enkripsi
+```
+#!/bin/bash
+
+date=$(date "+%H")
+loc=/home/duhbuntu/sisop/prak1
+file=$(date "+%H:%M %d-%B-%Y")
+
+low=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
+hig=ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+rot=$date
+
+cat /var/log/syslog | tr "${low:0:26}" "${low:rot:26}" | tr "${hig:0:26}" "${hig:rot:26}"  > "$loc/$file"
+```
++ `low` berarti sebuah set karakter alfabet lowercase asli yakni **(a-z)**
++ `high` berarti sebuah set karakter alfabet uppercase asli yakni **(A-Z)**
++ `rot` berarti rotasi/geser dari alfabet, dalam hal ini berupa jam
++ `"${low:0:26}"` berarti seluruh karakter dari **($low)** mulai dari indeks ke 0 hingga 26, yang berarti kumpulan SET alfabet yang urut
++ `"${low:rot:26}"` berarti seluruh karakter dari **($low)** mulai dari indeks ke **($rot)** hingga **($rot+26)**, yang berarti kumpulan set karakter alfabet yang digeser sebesar **($rot)**
 
 5. Buatlah sebuah script bash untuk menyimpan record dalam syslog yang memenuhi kriteria berikut:
    * Tidak mengandung string “sudo”, tetapi mengandung string “cron”, serta buatlah pencarian stringnya tidak bersifat case sensitive, sehingga huruf kapital atau tidak, tidak menjadi masalah.

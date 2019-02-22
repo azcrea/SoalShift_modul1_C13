@@ -1,3 +1,5 @@
+#!/bin/bash
+
 date=$(date "+%H")
 loc=/home/duhbuntu/sisop/prak1
 file=$(date "+%H:%M %d-%B-%Y")

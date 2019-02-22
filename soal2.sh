@@ -1,6 +1,6 @@
 #!/bin/bash
 
-a=$(awk 'BEGIN {FS = ",";terbanyak=0;} {a[$1]+=$10} END{negara=0;for(b in a){if(a[b] > terbanyak){negara=b;terbanyak=a[b];}}print negara;}' WA_Sales_Products_2012-14.csv)
+a=$(awk 'BEGIN {FS = ",";terbanyak=0;} /2012/ {a[$1]+=$10} END{negara=0;for(b in a){if(a[b] > terbanyak){negara=b;terbanyak=a[b];}}print negara;}' WA_Sales_Products_2012-14.csv)
 echo "Negara terbanyak :"
 echo "$a"
 echo " "

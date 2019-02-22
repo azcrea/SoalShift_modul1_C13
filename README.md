@@ -27,6 +27,8 @@ done
 + `for n in $tempat/nature/*.jpg;` untuk setiap foto pada folder tersebut,
 + `foto=$(basename $n .jpg)` ambil basename dari foto tersebut
 + `base64 --decode $n | xxd -r > $tempat/nature/hasil/$foto'hasil'.jpg`, lalu decode dengan `base64 --decode $n`, dan reverse dengan `xxd -r` , lalu simpan pada `/home/duhbuntu/sisop/prak1/nature/hasil/$foto'hasil'.jpg`
+Setelah itu masukkan pada crontab dengan `crontab -e` lalu isi dengan 
+`14 14 14 2 5 /bin/bash /home/duhbuntu/sisop/prak1/soal1.sh`
 
 2. Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta untuk memberikan laporan berdasarkan file WA_Sales_Products_2012-14.csv. Laporan yang diminta berupa:
    * Tentukan negara dengan penjualan(quantity) terbanyak pada tahun 2012.

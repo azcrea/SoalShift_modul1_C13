@@ -1,7 +1,7 @@
-SAVEIFS=$IFS
-IFS=$':'
-name=($(echo "$1"))
-IFS=$SAVEIFS
+#!/bin/bash
+
+name=$(echo "$1" | cut -d':' -f1)
+
 
 low=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
 hig=ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 loc=$(pwd)
-res=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1)
 
 randompassword(){
 res=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1)
@@ -11,6 +10,7 @@ do
 done
 
 }
+
 
 i=1
 

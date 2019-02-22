@@ -38,7 +38,9 @@ Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta un
 ### Jawab:
    * Untuk mendapatkan kota terbanyak quantity nya, sehingga kita perlu mencari setiap pendapatan pada tahun 2012 per negaranya
      ```bash
-     a=$(awk 'BEGIN {FS = ",";terbanyak=0;} /2012/ {a[$1]+=$10} END{negara=0;for(b in a){if(a[b] > terbanyak)
+     a=$(awk 'BEGIN {FS = ",";terbanyak=0;} 
+     /2012/ {a[$1]+=$10} 
+     END{negara=0;for(b in a){if(a[b] > terbanyak)
      {negara=b;terbanyak=a[b];}}print negara;}' WA_Sales_Products_2012-14.csv)
      echo "Negara terbanyak :"
      echo "$a"
@@ -49,7 +51,23 @@ Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta un
      + `/2012/`, berarti mengambil seluruh data yang berada pada tahun 2012
      + `a[$1]+=$10`, berarti menjumlahkan seluruh quantity, `$10`, berdasarkan negaranya, atau dalam hal ini dalam array a dengan indeks `a[$1]`
      + `for(b in a){if(a[b] > terbanyak){negara=b;terbanyak=a[b];}}`, berarti akan mengecek setiap indeks array a, yakni array map, `a["United States"]` apakah ia merupakan negara dengan **quantity** terbanyak dengan `if(a[b] > terbanyak {negara=b;terbanyak=a[b];}` lalu mencetak negara tersebut dan menyimpannya di variabel a
-   * Untuk mendapatkan production line terbanyak
+   * Untuk mendapatkan tiga production line terbanyak, maka kita bisa menggunakan cara yang sama, namun karena kita membutuh kan tiga production line terbanyak, kita bisa memanfaatkan command `sort` yang berfungsi untuk menyortir baik ASC maupun DESC berdasarkan kolom tertentu (defaultnya adalah kolom pertama), dan juga `head` yang berfungsi untuk mengambil data teratas dari suatu file. Setelah itu kita simpan di variabel bash `$b`
+     ```bash 
+     b=$(awk -v negara="$a" 'BEGIN {FS = ",";OFS=FS} 
+     ($1 == negara && $7 == 2012 ) {a[$4]+=$10} 
+     END{for(b in a)
+      {
+       print b,a[b]
+      }}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}') echo "Production Line terbanyak :"
+     echo "$b"
+     echo " "
+     ```
+     + `awk -v negara="$a"`, berarti awk akan menginterpretasi variabel `$a` pada bash menjadi variabel `negara` pada awk.
+     + `OFS=FS`, berarti output dari awk tersebut akan dipisahkan oleh delimiter yang sama seperti `FS` yakni `','` (koma)
+     + `($1 == negara && $7 == 2012 )`, berarti awk akan mengambil seluruh negara, kolom `$1`, yang merupakan hasil dari soal a, dan mengambil seluruh data yang memiliki nilai 2012 pada kolom `$7` yakni tahunnya
+     + `a[$4]+=$10`, berarti menjumlahkan seluruh quantity, `$10`, berdasarkan product line, atau dalam hal ini dalam array a dengan indeks `a[$4]`
+     + `sort -nrk2 -t,`, berarti akan menyortir seluruh data tersebut, `-nrk2` berarti akan disortir secara DESC berdasarkan kolom ke dua, `-t,` dengan field yang dipisahkan oleh koma
+     + `head -n3`, berarti akan mengambil tiga data pertama
 
 ## Soal 3
 Buatlah sebuah script bash yang dapat menghasilkan password secara acak sebanyak 12 karakter yang terdapat huruf besar, huruf kecil, dan angka. Password acak tersebut disimpan pada file berekstensi .txt dengan ketentuan pemberian nama sebagai berikut:

@@ -5,7 +5,7 @@ echo "Negara terbanyak :"
 echo "$a"
 echo " "
 
-b=$(awk -v negara="$a" 'BEGIN {FS = ",";OFS=FS} $0 ~ negara {a[$4]+=$10} END{for(b in a){print b,a[b]}}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}')
+b=$(awk -v negara="$a" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $7 == 2012 ) {a[$4]+=$10} END{for(b in a){print b,a[b]}}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}')
 echo "Production Line terbanyak :"
 echo "$b"
 echo " "
@@ -23,13 +23,14 @@ do
 done
 
 echo "${produk[0]} :"
-awk -v negara="$a" -v p1="${temp[0]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
+awk -v negara="$a" -v p1="${temp[0]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1 && $7 == 2012) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
 echo ""
 echo "${produk[1]} :"
-awk -v negara="$a" -v p1="${temp[1]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
+awk -v negara="$a" -v p1="${temp[1]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1 && $7 == 2012) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
 echo ""
 echo "${produk[2]} :"
-awk -v negara="$a" -v p1="${temp[2]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
+awk -v negara="$a" -v p1="${temp[2]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1 && $7 == 2012) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
 echo ""
 echo "Top 3 Produk: "
-awk -v negara="$a" -v p1="${temp[0]}" -v p2="${temp[1]}" -v p3="${temp[2]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1) || ($1 == negara && $4 == p2) || ($1 == negara && $4 == p3)  {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv  | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
+awk -v negara="$a" -v p1="${temp[0]}" -v p2="${temp[1]}" -v p3="${temp[2]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1 && $7 == 2012) || ($1 == negara && $4 == p2 && $7 == 2012) || ($1 == negara && $4 == p3 && $7 == 2012)  {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv  | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
+

@@ -50,7 +50,8 @@ Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta un
      + `terbanyak=0`, merupakan variabel untuk menyimpan `quantity` terbanyak
      + `/2012/`, berarti mengambil seluruh data yang berada pada tahun 2012
      + `a[$1]+=$10`, berarti menjumlahkan seluruh quantity, `$10`, berdasarkan negaranya, atau dalam hal ini dalam array a dengan indeks `a[$1]`
-     + `for(b in a){if(a[b] > terbanyak){negara=b;terbanyak=a[b];}}`, berarti akan mengecek setiap indeks array a, yakni array map, `a["United States"]` apakah ia merupakan negara dengan **quantity** terbanyak dengan `if(a[b] > terbanyak {negara=b;terbanyak=a[b];}` lalu mencetak negara tersebut dan menyimpannya di variabel a
+     + `for(b in a){if(a[b] > terbanyak){negara=b;terbanyak=a[b];}}`, berarti akan mengecek setiap indeks array a, yakni array map, `a["United States"]` apakah ia merupakan negara dengan **quantity** terbanyak dengan `if(a[b] > terbanyak) {negara=b;terbanyak=a[b];}` lalu mencetak negara tersebut dan menyimpannya di variabel a
+     
    * Untuk mendapatkan tiga production line terbanyak, maka kita bisa menggunakan cara yang sama, namun karena kita membutuh kan tiga production line terbanyak, kita bisa memanfaatkan command `sort` yang berfungsi untuk menyortir baik ASC maupun DESC berdasarkan kolom tertentu (defaultnya adalah kolom pertama), dan juga `head` yang berfungsi untuk mengambil data teratas dari suatu file. Setelah itu kita simpan di variabel bash `$b`
      ```bash 
      b=$(awk -v negara="$a" 'BEGIN {FS = ",";OFS=FS} 
@@ -58,7 +59,8 @@ Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta un
      END{for(b in a)
       {
        print b,a[b]
-      }}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}') echo "Production Line terbanyak :"
+      }}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}')
+     echo "Production Line terbanyak :"
      echo "$b"
      echo " "
      ```
@@ -68,7 +70,48 @@ Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta un
      + `a[$4]+=$10`, berarti menjumlahkan seluruh quantity, `$10`, berdasarkan product line, atau dalam hal ini dalam array a dengan indeks `a[$4]`
      + `sort -nrk2 -t,`, berarti akan menyortir seluruh data tersebut, `-nrk2` berarti akan disortir secara DESC berdasarkan kolom ke dua, `-t,` dengan field yang dipisahkan oleh koma
      + `head -n3`, berarti akan mengambil tiga data pertama
-
+     
+   * Untuk mendapatkan nomer 3, langkah yang dibutuh kan sama, namun dari seluruh data pada variabel b tadi, kita perlu memisahnya dan memindahkannya pada array. Karena masing-masing string dipisahkan oleh `\n`, maka dari itu kita bisa mengganti `IFS` yang merupakan variabel bash yang merupakan field separator array menjadi `\n`, lalu menyimpan seluruhnya di sebuah array `temp`
+     ```bash
+     SAVEIFS=$IFS
+     IFS=$'\n'
+     produk=($b)
+     IFS=$SAVEIFS
+     
+     declare temp=()
+     
+     for (( i=0; i<${#produk[@]}; i++ ))
+     do
+      temp[$i]="${produk[$i]}"
+     done
+     ```
+     + `IFS=$'\n'` Mengganti IFS menjadi endline
+     + `temp=()` Merupakan inisialisasi array `temp`
+     + `temp[$i]="${produksi[$i]}"` Memasukkan masing-masing production line ke array temp
+     
+     **Untuk mendapatkan tiga produk teratas dari masing-masing production line**
+     kita bisa mendapatkan masing-masing dengan cara yang sama seperti mendapatkan tiga produk teratas dari negara, yakni
+     + `a[$6]+=$10`, berarti menjumlahkan seluruh quantity, `$10`, berdasarkan product, atau dalam hal ini dalam array a dengan indeks `a[$6]`
+     + `sort -nrk2 -t,`, berarti akan menyortir seluruh data tersebut, `-nrk2` berarti akan disortir secara DESC berdasarkan kolom ke dua, `-t,` dengan field yang dipisahkan oleh koma
+     + `head -n3`, berarti akan mengambil tiga data pertama
+     
+     ```bash
+     echo "${produk[0]} :"
+     awk -v negara="$a" -v p1="${temp[0]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1 && $7 == 2012) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
+     echo ""
+     echo "${produk[1]} :"
+     awk -v negara="$a" -v p1="${temp[1]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1 && $7 == 2012) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
+     echo ""
+     echo "${produk[2]} :"
+     awk -v negara="$a" -v p1="${temp[2]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara && $4 == p1 && $7 == 2012) {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
+     echo ""
+     ```
+     **Untuk mendapatkan tiga produk teratas dari seluruh production line**
+     ```bash
+     echo "Top 3 Produk: "
+     awk -v negara="$a" -v p1="${temp[0]}" -v p2="${temp[1]}" -v p3="${temp[2]}" 'BEGIN {FS = ",";OFS=FS} ($1 == negara &&$4 == p1 && $7 == 2012) || ($1 == negara && $4 == p2 && $7 == 2012) || ($1 == negara && $4 == p3 && $7 == 2012)  {a[$6]+=$10} END{for(b in a) print b,a[b]}' WA_Sales_Products_2012-14.csv  | sort -nrk2 -t, | head -n3 | awk 'BEGIN{FS=","} {print $1}'
+     ```
+     
 ## Soal 3
 Buatlah sebuah script bash yang dapat menghasilkan password secara acak sebanyak 12 karakter yang terdapat huruf besar, huruf kecil, dan angka. Password acak tersebut disimpan pada file berekstensi .txt dengan ketentuan pemberian nama sebagai berikut:
    * Jika tidak ditemukan file password1.txt maka password acak tersebut disimpan pada file bernama password1.txt

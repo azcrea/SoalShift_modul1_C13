@@ -86,7 +86,7 @@ do
 done
 ```
 Karena terkadang `fold` mengambil 12 bagian pertama dari random generator tersebut terkadang tidak termasuk huruf kecil dan atau huruf besar serta angka, maka kita ulang ketika tidak memenuhi aturan dengan fungsi `randompassword()`
-+ Fungsi `randompassword()` berfungsi untuk mengenerate password selama belum memenuhi kondisi **(a-zA-Z0-9)**
++ Fungsi `randompassword()` berfungsi untuk mengenerate password selama belum memenuhi kondisi **a-zA-Z0-9**
 + `if [ -f "$loc/password$i.txt" ]` berfungsi untuk mengecek apakah ada file password-n.txt, apabila ada maka
 + `awk '{print $1}' password$i.txt` kita ambil isi dari file password yang ada tersebut
 +  `while [ "$pass" == "$res" ] do randompassword` lalu kita generate password baru apabila password baru tersebut sama dengan password yang sudah ada tersebut
@@ -102,8 +102,8 @@ Lakukan backup file syslog setiap jam dengan format nama file “jam:menit tangg
    * dan buatkan juga bash script untuk dekripsinya.
 ### Jawab:
 ### Enkripsi:
-Untuk meng-enkripsi back up dari **(/var/log/syslog)**, kita perlu waktu ketika script tersebut dijalankan. Untuk itu kita bisa menggunakan command `date "+%H"` dan menyimpannya pada sebuah variable untuk diolah pada scriptnya. Dari masalah ini, kita bisa menggunakan command `tr` untuk mentranslate sebuah set pattern dari suatu karakter menjadi karakter lain,
-command `tr [SET1] [SET2]` berarti string yang mengandung **(SET1)** akan di translate / dirubah ke **(SET2)**, berikut script yang bisa digunakan untuk enkripsi
+Untuk meng-enkripsi back up dari **/var/log/syslog**, kita perlu waktu ketika script tersebut dijalankan. Untuk itu kita bisa menggunakan command `date "+%H"` dan menyimpannya pada sebuah variable untuk diolah pada scriptnya. Dari masalah ini, kita bisa menggunakan command `tr` untuk mentranslate sebuah set pattern dari suatu karakter menjadi karakter lain,
+command `tr [SET1] [SET2]` berarti string yang mengandung **SET1** akan di translate / dirubah ke **SET2**, berikut script yang bisa digunakan untuk enkripsi
 ```
 #!/bin/bash
 
@@ -118,11 +118,11 @@ rot=$date
 
 cat /var/log/syslog | tr "${low:0:26}" "${low:rot:26}" | tr "${hig:0:26}" "${hig:rot:26}"  > "$loc/$file"
 ```
-+ `low` berarti sebuah set karakter alfabet lowercase asli yakni **(a-z)**
-+ `high` berarti sebuah set karakter alfabet uppercase asli yakni **(A-Z)**
++ `low` berarti sebuah set karakter alfabet lowercase asli yakni **a-z**
++ `high` berarti sebuah set karakter alfabet uppercase asli yakni **A-Z**
 + `rot` berarti rotasi/geser dari alfabet, dalam hal ini berupa jam
-+ `"${low:0:26}"` berarti seluruh karakter dari **($low)** mulai dari indeks ke 0 hingga 26, yang berarti kumpulan SET alfabet yang urut
-+ `"${low:rot:26}"` berarti seluruh karakter dari **($low)** mulai dari indeks ke **($rot)** hingga **($rot+26)**, yang berarti kumpulan set karakter alfabet yang digeser sebesar **($rot)**
++ `"${low:0:26}"` berarti seluruh karakter dari **$low** mulai dari indeks ke 0 hingga 26, yang berarti kumpulan SET alfabet yang urut
++ `"${low:rot:26}"` berarti seluruh karakter dari **$low** mulai dari indeks ke **$rot** hingga **$rot+26**, yang berarti kumpulan set karakter alfabet yang digeser sebesar **$rot**
 
 5. Buatlah sebuah script bash untuk menyimpan record dalam syslog yang memenuhi kriteria berikut:
    * Tidak mengandung string “sudo”, tetapi mengandung string “cron”, serta buatlah pencarian stringnya tidak bersifat case sensitive, sehingga huruf kapital atau tidak, tidak menjadi masalah.

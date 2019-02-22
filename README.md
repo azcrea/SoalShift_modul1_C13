@@ -4,7 +4,7 @@ Anda diminta tolong oleh teman anda untuk mengembalikan filenya yang telah dienk
 Hint: Base64, Hexdump
 ### Jawab:
 Diketahui bahwa isi nature.zip adalah sebuah file terenkripsi yang berekstensi `.jpeg`. Ketika di buka akan muncul error karena header yang digunakan bukan merupakan header `.jpeg`. Oleh karena itu langkah awal yang harus dilakukan adalah mendekripsi Foto tersebut dengan base64 encoding. Hasil yang decode tersebut akan memberikan hexdump dari file tersebut, sehingga kita bisa mereturn hexdump tersebut ke biner aslinya dengan script `xxd` yang disediakan linux.
-```
+```bash
 #!/bin/bash
 
 tempat=/home/duhbuntu/sisop/prak1
@@ -46,7 +46,7 @@ Buatlah sebuah script bash yang dapat menghasilkan password secara acak sebanyak
    * Password yang dihasilkan tidak boleh sama.
 ### Jawab:
 Untuk mendapat kan random, kita bisa mengambil sebuah random generator yang disediakan oleh linux pada `/dev/urandom`. Dari random tersebut tentu kita harus mengambil hanya huruf kecil, huruf besar, dan angkanya saja, oleh karena itu kita bisa menggunakan fungsi `tr -dc 'a-zA-Z0-9'` yang berarti kita hanya mengambil lowercase a-z, uppercase A-Z, dan number dari random tersebut karena `tr -dc` berarti menghapus komplemen dari pola `'a-zA-Z0-9`, lalu kita bisa mengambil hanya 12 bagian pertamanya saja dengan `fold -w 12'` yang berarti mengambil hanya 12 bagian hurufnya.
-```
+```bash
 #!/bin/bash
 
 loc=$(pwd)
@@ -104,7 +104,7 @@ Lakukan backup file syslog setiap jam dengan format nama file “jam:menit tangg
 ### Enkripsi:
 Untuk meng-enkripsi back up dari **/var/log/syslog**, kita perlu waktu ketika script tersebut dijalankan. Untuk itu kita bisa menggunakan command `date "+%H"` dan menyimpannya pada sebuah variable untuk diolah pada scriptnya. Dari masalah ini, kita bisa menggunakan command `tr` untuk mentranslate sebuah set pattern dari suatu karakter menjadi karakter lain,
 command `tr [SET1] [SET2]` berarti string yang mengandung **SET1** akan di translate / dirubah ke **SET2**, berikut script yang bisa digunakan untuk enkripsi
-```
+```bash
 #!/bin/bash
 
 date=$(date "+%H")
@@ -131,7 +131,7 @@ Karena script tersebut dijalankan setiap jam, maka crontab yang digunakan adalah
 
 ### Dekripsi
 Untuk dekripsi dari file kita bisa mengikuti cara yang sama dengan enkripsi, hanya saja rotasinya kita rubah menjadi **26-jam**, sehingga merotasi ke sisa dari kunci enkripsi tersebut.
-```
+```bash
 #!/bin/bash
 
 name=$(echo "$1" | cut -d':' -f1)

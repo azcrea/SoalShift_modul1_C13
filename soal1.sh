@@ -5,7 +5,7 @@ unzip $tempat/nature.zip
 
 k=0
 
-mkdir $tempat/nature/hasil
+if [[ ! -d "$tempat/nature/hasil"  ]]; then mkdir $tempat/nature/hasil; fi
 
 for n in $tempat/nature/*.jpg;
 do

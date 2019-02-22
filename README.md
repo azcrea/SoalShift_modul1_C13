@@ -125,9 +125,12 @@ cat /var/log/syslog | tr "${low:0:26}" "${low:rot:26}" | tr "${hig:0:26}" "${hig
 + `"${low:rot:26}"` berarti seluruh karakter dari **$low** mulai dari indeks ke **$rot** hingga **$rot+26**, yang berarti kumpulan set karakter alfabet yang digeser sebesar **$rot**
 + `tr "${low:0:26}" "${low:rot:26}"` berarti setiap karakter dengan SET karakter pola **${low:0:26}** akan diganti ke SET karakter pola **${low:$rot:26}**. Semisal sekarang menunjukkan pukul 7, maka SET 1, yakni **[a-z]** akan dirubah ke SET 2 yakni **[h-za-g]**, jadi **abcdefghijklmnopqrstuvwxyz** **(low indeks 0 hingga 26+0)** akan dirubah ke **hijklmnopqrstuvwxyzabcdefg** **(low indeks ke 7 hingga 26+7)**
 + `> $loc/$file` berarti kita akan memasukkan backup tersebut ke file pada `/home/duhbuntu/sisop/prak1/[nama-file]`
+Karena script tersebut dijalankan setiap jam, maka crontab yang digunakan adalah
+`@hourly /bin/bash /home/duhbuntu/sisop/prak1/soal4.sh` yang berarti dijalankan perjam
+
 
 ### Dekripsi
-Untuk dekripsi dari file
+Untuk dekripsi dari file kita bisa mengikuti cara yang sama dengan enkripsi, hanya saja rotasinya kita rubah menjadi **26-jam**, sehingga merotasi ke 
 
 
 5. Buatlah sebuah script bash untuk menyimpan record dalam syslog yang memenuhi kriteria berikut:
@@ -135,3 +138,4 @@ Untuk dekripsi dari file
    * Jumlah field (number of field) pada baris tersebut berjumlah kurang dari 13.
    * Masukkan record tadi ke dalam file logs yang berada pada direktori /home/[user]/modul1.
    * Jalankan script tadi setiap 6 menit dari menit ke 2 hingga 30, contoh 13:02, 13:08, 13:14, dst.
+### Deskripsi

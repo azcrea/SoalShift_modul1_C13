@@ -130,7 +130,21 @@ Karena script tersebut dijalankan setiap jam, maka crontab yang digunakan adalah
 
 
 ### Dekripsi
-Untuk dekripsi dari file kita bisa mengikuti cara yang sama dengan enkripsi, hanya saja rotasinya kita rubah menjadi **26-jam**, sehingga merotasi ke 
+Untuk dekripsi dari file kita bisa mengikuti cara yang sama dengan enkripsi, hanya saja rotasinya kita rubah menjadi **26-jam**, sehingga merotasi ke sisa dari kunci enkripsi tersebut.
+```
+#!/bin/bash
+
+name=$(echo "$1" | cut -d':' -f1)
+
+
+low=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
+hig=ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+rot=$((26-${name[0]}))
+
+cat "$1" | tr "${low:0:26}" "${low:rot:26}" | tr "${hig:0:26}" "${hig:rot:26}"  > "$1-dec"
+```
++ `echo "$1" | cut -d':' -f1` berarti kita hanya mengambil jam dari nama argumen file yang kita dekripsi
 
 
 5. Buatlah sebuah script bash untuk menyimpan record dalam syslog yang memenuhi kriteria berikut:

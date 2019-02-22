@@ -37,7 +37,7 @@ Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta un
    * Tentukan tiga product yang memberikan penjualan(quantity) terbanyak berdasarkan tiga product line yang didapatkan pada soal poin b.
 ### Jawab:
    * Untuk mendapatkan kota terbanyak quantity nya, sehingga kita perlu mencari setiap pendapatan pada tahun 2012 per negaranya
-     ```
+     ```bash
      a=$(awk 'BEGIN {FS = ",";terbanyak=0;} /2012/ {a[$1]+=$10} END{negara=0;for(b in a){if(a[b] > terbanyak)
      {negara=b;terbanyak=a[b];}}print negara;}' WA_Sales_Products_2012-14.csv)
      echo "Negara terbanyak :"

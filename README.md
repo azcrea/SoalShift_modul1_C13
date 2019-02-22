@@ -1,6 +1,32 @@
 # SoalShift_modul1_C13
-1. Anda diminta tolong oleh teman anda untuk mengembalikan filenya yang telah dienkripsi oleh seseorang menggunakan bash script, file yang dimaksud adalah nature.zip. Karena terlalu mudah kalian memberikan syarat akan membuka seluruh file tersebut jika pukul 14:14 pada tanggal 14 Februari atau hari tersebut adalah hari jumat pada bulan Februari.
+## Soal1
+Anda diminta tolong oleh teman anda untuk mengembalikan filenya yang telah dienkripsi oleh seseorang menggunakan bash script, file yang dimaksud adalah nature.zip. Karena terlalu mudah kalian memberikan syarat akan membuka seluruh file tersebut jika pukul 14:14 pada tanggal 14 Februari atau hari tersebut adalah hari jumat pada bulan Februari.
 Hint: Base64, Hexdump
+### Jawab:
+Diketahui bahwa isi nature.zip adalah sebuah file terenkripsi yang berekstensi `.jpeg`. Ketika di buka akan muncul error karena header yang digunakan bukan merupakan header `.jpeg`. Oleh karena itu langkah awal yang harus dilakukan adalah mendekripsi Foto tersebut dengan base64 encoding. Hasil yang decode tersebut akan memberikan hexdump dari file tersebut, sehingga kita bisa mereturn hexdump tersebut ke biner aslinya dengan script `xxd` yang disediakan linux.
+```
+#!/bin/bash
+
+tempat=/home/duhbuntu/sisop/prak1
+if [[ ! -d "$tempat/nature"  ]];then unzip $tempat/nature.zip -d $tempat; fi
+
+k=0
+
+if [[ ! -d "$tempat/nature/hasil"  ]]; then mkdir $tempat/nature/hasil; fi
+
+for n in $tempat/nature/*.jpg;
+do
+ foto=$(basename $n .jpg)
+ #echo $foto
+ base64 --decode $n | xxd -r > $tempat/nature/hasil/$foto'hasil'.jpg
+ k=$((k+1))
+done
+```
++ `if [[ ! -d "$tempat/nature"  ]];then unzip $tempat/nature.zip -d $tempat; fi` untuk cek apakah terdapat nature telah diekstrak, apabila belum maka esktrak dengan `unzip`
++ `if [[ ! -d "$tempat/nature/hasil"  ]]; then mkdir $tempat/nature/hasil; fi`, kita kumpulan file yang telah di dekripsi pada folder `nature/hasil`
++ `for n in $tempat/nature/*.jpg;` untuk setiap foto pada folder tersebut,
++ `foto=$(basename $n .jpg)` ambil basename dari foto tersebut
++ `base64 --decode $n | xxd -r > $tempat/nature/hasil/$foto'hasil'.jpg`, lalu decode dengan `base64 --decode $n`, dan reverse dengan `xxd -r` , lalu simpan pada `/home/duhbuntu/sisop/prak1/nature/hasil/$foto'hasil'.jpg`
 
 2. Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta untuk memberikan laporan berdasarkan file WA_Sales_Products_2012-14.csv. Laporan yang diminta berupa:
    * Tentukan negara dengan penjualan(quantity) terbanyak pada tahun 2012.

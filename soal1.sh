@@ -1,7 +1,7 @@
 #!/bin/bash
 
-tempat=$(pwd)
-unzip $tempat/nature.zip
+tempat=/home/duhbuntu/sisop/prak1
+unzip $tempat/nature.zip -d $tempat
 
 k=0
 
@@ -14,3 +14,4 @@ do
  base64 --decode $n | xxd -r > $tempat/nature/hasil/$foto'hasil'.jpg
  k=$((k+1))
 done
+

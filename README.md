@@ -84,6 +84,11 @@ do
 done
 ```
 Karena terkadang `fold` mengambil 12 bagian pertama dari random generator tersebut terkadang tidak termasuk huruf kecil dan atau huruf besar serta angka, maka kita ulang ketika tidak memenuhi aturan dengan fungsi `randompassword()`
++ Fungsi `randompassword()` berfungsi untuk mengenerate password selama belum memenuhi kondisi **(a-zA-Z0-9)**
++ `if [ -f "$loc/password$i.txt" ]` berfungsi untuk mengecek apakah ada file password-n.txt, apabila ada maka
++ `awk '{print $1}' password$i.txt` kita ambil isi dari file password yang ada tersebut
++  `while [ "$pass" == "$res" ] do randompassword` lalu kita generate password baru apabila password baru tersebut sama dengan password yang sudah ada tersebut
++ `echo "$res" > password$i.txt exit` apabila sudah tidak sama dengan password lain dan pada password-n.txt yang belum tersedia, maka simpan dan exit dari script tersebut
 
 
 4. Lakukan backup file syslog setiap jam dengan format nama file “jam:menit tanggal-bulan-tahun”. Isi dari file backup terenkripsi dengan konversi huruf (string manipulation) yang disesuaikan dengan jam dilakukannya backup misalkan sebagai berikut:
